@@ -1,0 +1,113 @@
+<ArcGIS defaultAssembly="ArcGISProBasemapAddin.dll"
+        defaultNamespace="ArcGISProBasemapAddin"
+        xmlns="http://schemas.esri.com/DADF/Registry"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
+  <AddInInfo id="{b6a42e91-7c3d-4f18-a9e2-5d8c1b0e3f77}" version="1.0" desktopVersion="3.7">
+    <Name>ArcGISProBasemapAddin</Name>
+    <Description>GeoAI 多源合规底图（GCJ-02 实时纠偏至 WGS-84）与 Mapsforge (.map) 离线矢量三层拆层合成插件</Description>
+    <Image></Image>
+    <Author>GeoAI @ YY23</Author>
+    <Company>GeoAI Studio</Company>
+    <Date>2026-10-16</Date>
+    <Subject>Framework</Subject>
+  </AddInInfo>
+
+  <modules>
+    <insertModule id="ArcGISProBasemapAddin_Module"
+                  className="BasemapModule"
+                  autoLoad="false"
+                  caption="GeoAI 多源底图与离线矢量模块">
+      <tabs>
+        <tab id="ArcGISProBasemapAddin_Tab" caption="GeoAI 底图工作台" keytip="G">
+          <group refID="ArcGISProBasemapAddin_Group_Workbench" />
+          <group refID="ArcGISProBasemapAddin_Group_Presets" />
+        </tab>
+      </tabs>
+
+      <groups>
+        <group id="ArcGISProBasemapAddin_Group_Workbench" caption="底图与离线矢量中枢" appearsOnAddInTab="true" keytip="W">
+          <button refID="ArcGISProBasemapAddin_DockPane_ShowButton" size="large" />
+          <button refID="ArcGISProBasemapAddin_StartDaemonButton" size="large" />
+        </group>
+        <group id="ArcGISProBasemapAddin_Group_Presets" caption="一键黄金拆层预设" appearsOnAddInTab="true" keytip="P">
+          <button refID="ArcGISProBasemapAddin_PresetGoldenStackButton" size="large" />
+          <button refID="ArcGISProBasemapAddin_PresetOutdoorFullButton" size="large" />
+          <button refID="ArcGISProBasemapAddin_PresetAmapSatButton" size="large" />
+        </group>
+      </groups>
+
+      <controls>
+        <button id="ArcGISProBasemapAddin_DockPane_ShowButton"
+                caption="多源底图工作台"
+                className="Buttons.ShowBasemapDockPaneButton"
+                loadOnClick="true"
+                smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png"
+                largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png"
+                keytip="D">
+          <tooltip heading="打开 GeoAI 多源底图与离线矢量工作台">
+            管理在线合规底图（GCJ-02 实时纠偏）与本地 Mapsforge (.map) 离线矢量拆层叠加。<disabledText />
+          </tooltip>
+        </button>
+
+        <button id="ArcGISProBasemapAddin_StartDaemonButton"
+                caption="瓦片引擎自检"
+                className="Buttons.CheckDaemonStatusButton"
+                loadOnClick="true"
+                smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png"
+                largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png"
+                keytip="S">
+          <tooltip heading="启动并自检本地 MapsforgeTileServer 瓦片服务">
+            检查 127.0.0.1:18765 瓦片渲染守护进程健康状态并注册默认云南/滇池离线图层。<disabledText />
+          </tooltip>
+        </button>
+
+        <button id="ArcGISProBasemapAddin_PresetGoldenStackButton"
+                caption="滇池黄金三层栈"
+                className="Buttons.LoadGoldenStackPresetButton"
+                loadOnClick="true"
+                smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png"
+                largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png"
+                keytip="1">
+          <tooltip heading="一键加载：卫星底图 + 50m稀疏等高线 + LocusSat路网注记">
+            自动拼接 N24E102.map 与 N25E102.map 跨纬线等高线，叠加 Ch-Yunnan_oam 路网注记与纠偏卫图。<disabledText />
+          </tooltip>
+        </button>
+
+        <button id="ArcGISProBasemapAddin_PresetOutdoorFullButton"
+                caption="云南全要素地形"
+                className="Buttons.LoadOutdoorFullPresetButton"
+                loadOnClick="true"
+                smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png"
+                largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png"
+                keytip="2">
+          <tooltip heading="一键加载：云南全要素离线户外地形图 (OutdoorFull)">
+            基于本机 Ch-Yunnan_oam.osm.map 与 OutdoorFull.xml 离线渲染，零外部网络请求。<disabledText />
+          </tooltip>
+        </button>
+
+        <button id="ArcGISProBasemapAddin_PresetAmapSatButton"
+                caption="高德纠偏卫图"
+                className="Buttons.LoadAmapSatPresetButton"
+                loadOnClick="true"
+                smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png"
+                largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png"
+                keytip="3">
+          <tooltip heading="一键加载：高德卫星影像 (GCJ-02 实时重采样至 WGS-84)">
+            通过本地代理将高德 GCJ-02 卫星瓦片实时双线性重采样纠偏至 WGS-84，与 GPX 轨迹零偏移叠合。<disabledText />
+          </tooltip>
+        </button>
+      </controls>
+
+      <dockPanes>
+        <dockPane id="ArcGISProBasemapAddin_DockPane"
+                  caption="GeoAI 多源底图与 Mapsforge 离线矢量工作台"
+                  className="ViewModels.BasemapDockPaneViewModel"
+                  dock="group"
+                  dockWith="esri_core_projectDockPane">
+          <content className="Views.BasemapDockPaneView" />
+        </dockPane>
+      </dockPanes>
+    </insertModule>
+  </modules>
+</ArcGIS>

@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-10-16T13:02:25+08:00",
+  "gates": {
+    "G1_map_probe": {
+      "passed": true,
+      "yunnan_official": "BASEMAP_NO_CONTOUR",
+      "ch_yunnan_oam": "BASEMAP_WITH_CONTOUR",
+      "n27e100_locus": "CONTOUR_ONLY",
+      "details": {
+        "yunnan.map": {
+          "highways": 357,
+          "contours": 0,
+          "water": 54,
+          "pois": 8
+        },
+        "Ch-Yunnan_oam": {
+          "highways": 495,
+          "contours": 1910,
+          "water": 55,
+          "pois": 16
+        },
+        "N27E100.map": {
+          "highways": 0,
+          "contours": 1559,
+          "water": 0,
+          "pois": 0
+        }
+      }
+    },
+    "G2_png32_and_protocols": {
+      "passed": true,
+      "transparent_ratio": 0.8966,
+      "visible_ratio": 0.1034,
+      "wmts_capabilities_bytes": 8145,
+      "mapserver_tile_cache_hit": "HIT"
+    },
+    "G3_multimap_stitching": {
+      "passed": true,
+      "tile": "13/6431/3508",
+      "south_only_visible_px": 6040,
+      "north_only_visible_px": 728,
+      "stitched_visible_px": 6778,
+      "stitched_top_half_px": 1679,
+      "stitched_bottom_half_px": 5099
+    },
+    "G4_theme_switch_and_dp_strip": {
+      "passed": true,
+      "cacheKey_contour": "22f5d5a98dac710b",
+      "cacheKey_roads_overlay": "c75cadb90ef7653b",
+      "cacheKey_outdoor_full": "eea30402492f12af",
+      "roads_overlay_visible_px": 49788,
+      "outdoor_full_opaque_px": 65536
+    },
+    "G5_gcj02_and_compliance": {
+      "passed": true,
+      "gcj02_corrected_header": "true",
+      "shifted_pixels_out_of_65536": 46478,
+      "foreign_border_basemap_blocked_http_code": 451
+    },
+    "G6_offline_and_composite": {
+      "passed": true,
+      "offline_proxy_blocked_http_code": 503,
+      "offline_local_tile_http_code": 200,
+      "composite_sheet": "d:\\AIAssistant\\GeoAI地理空间地图创作智能体\\projects\\arcgis-pro-basemap-addin\\tests\\results\\stage0_4panel_visual_verification.png"
+    }
+  },
+  "overall_status": "ALL_6_GATES_PASSED"
+}
