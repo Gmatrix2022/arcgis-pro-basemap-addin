@@ -68,33 +68,8 @@
 
 答案就在于插件优雅的**双进程中台架构**：
 
-```
-+--------------------------------------------------------------------+
-|                         ArcGIS Pro 3.7 Host                        |
-|                                                                    |
-|  [ Ribbon UI: GeoAI 工作台 ] <---> [ DockPane 交互控制台 ]         |
-|                     |                         |                    |
-|                     v                         v                    |
-|       [ AddIn 业务逻辑层 (.NET 10 / C# Pro SDK 3.7) ]              |
-|                     |                         |                    |
-|       (1) 本地进程探活与生命周期拉起             (2) CIM 图层注入    |
-|                     |                         |                    |
-+---------------------|-------------------------|--------------------+
-                      | 进程守候 (Port 18765)    | 
-                      v                         |
-+---------------------------------------------+ |
-|   Headless Mapsforge Tile Server (Java 17)  | |
-|                                             | |
-|  - MultiMapDataStore: 跨纬度空间缝合多.map     | |
-|  - XML Sanitizer: 动态正则剔除 dp 像素单位     | |
-|  - AMap Proxy: GCJ-02 -> WGS-84 逆采样纠偏    | |
-|  - 协议支持: OGC WMTS + ArcGIS REST MapServer| |
-+---------------------------------------------+ |
-                      ^                         |
-                      |                         |
-                      +-------------------------+
-                         标准 REST MapServer 握手
-```
+![ArcGIS Pro 3.7 多源合规底图与 Mapsforge 离线矢量系统架构图](../assets/architecture_diagram.png)
+*图 3：系统双进程解耦与黄金三层拆层技术架构图*
 
 ### 1. 动态 `dp` 移动端单位剥离黑科技
 Mapsforge 官方主题（如 Elevate、Locus 主题）为了适配各种高 DPI 手机屏，在 XML 中充斥着 `12dp`、`1.5dp` 这样的 Android 专用单位。直接丢给桌面端的 AWT / SVG 渲染器，解析器会直接抛出 `NumberFormatException` 崩溃。

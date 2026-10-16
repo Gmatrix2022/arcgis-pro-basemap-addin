@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ArcGIS Pro 3.7 多源合规底图与 Mapsforge 离线矢量系统架构图</title>
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    background: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .diagram-container {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  }
+</style>
+</head>
+<body>
+
+<div class="diagram-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 740" width="1120" height="740" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;">
+  <defs>
+    <!-- 箭头标记 -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0d9488" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c" />
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+    </marker>
+    
+    <!-- 卡片渐变与投影 -->
+    <filter id="card-shadow" x="-4%" y="-4%" width="108%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+
+    <linearGradient id="header-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 顶部标题横幅 -->
+  <rect x="20" y="15" width="1080" height="52" rx="10" fill="url(#header-grad)" />
+  <text x="40" y="47" fill="#ffffff" font-size="19" font-weight="700" letter-spacing="0.5">ArcGIS Pro 3.7 多源合规底图与 Mapsforge 离线矢量系统架构</text>
+  <rect x="750" y="27" width="150" height="26" rx="13" fill="rgba(37, 99, 235, 0.25)" stroke="#3b82f6" stroke-width="1"/>
+  <text x="825" y="44" fill="#60a5fa" font-size="12" font-weight="600" text-anchor="middle">.NET 10 / C# Pro SDK</text>
+  <rect x="915" y="27" width="165" height="26" rx="13" fill="rgba(13, 148, 136, 0.25)" stroke="#14b8a6" stroke-width="1"/>
+  <text x="997" y="44" fill="#2dd4bf" font-size="12" font-weight="600" text-anchor="middle">Java 17 / Mapsforge 0.25</text>
+
+  <!-- ======================= 区域 1：ArcGIS Pro 客户端进程 ======================= -->
+  <rect x="20" y="85" width="1080" height="265" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <rect x="36" y="73" width="220" height="24" rx="6" fill="#2563eb"/>
+  <text x="146" y="89" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">ArcGIS Pro 3.7 宿主客户端进程</text>
+
+  <!-- 1.1 UI 交互层 -->
+  <g filter="url(#card-shadow)">
+    <rect x="40" y="115" width="310" height="215" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <rect x="40" y="115" width="310" height="34" rx="10 10 0 0" fill="#eff6ff"/>
+    <text x="56" y="137" fill="#1d4ed8" font-size="13" font-weight="700">🖥️ 前端展示与人机交互层</text>
+    
+    <!-- Ribbon 按钮区 -->
+    <rect x="56" y="160" width="278" height="64" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="70" y="179" fill="#0f172a" font-size="12" font-weight="600">GeoAI 底图工作台 (Ribbon Tab)</text>
+    <text x="70" y="198" fill="#64748b" font-size="11">5 组动作按键：一键装配 / 纠偏卫星 /</text>
+    <text x="70" y="213" fill="#64748b" font-size="11">50m等高线 / 离线赛事模式 / 清空栈</text>
+
+    <!-- DockPane 控制面板 -->
+    <rect x="56" y="235" width="278" height="80" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="70" y="255" fill="#0f172a" font-size="12" font-weight="600">DockPane 侧边悬浮控制台</text>
+    <text x="70" y="274" fill="#64748b" font-size="11">实时监测本地服务健康状态 (18765 端口)</text>
+    <text x="70" y="291" fill="#64748b" font-size="11">图层透明度微调、离线 Profile 自由切换</text>
+    <text x="70" y="306" fill="#64748b" font-size="11">一键呼出本地等高线与离线矢量管理</text>
+  </g>
+
+  <!-- 1.2 Add-In 核心控制逻辑 -->
+  <g filter="url(#card-shadow)">
+    <rect x="375" y="115" width="350" height="215" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <rect x="375" y="115" width="350" height="34" rx="10 10 0 0" fill="#eff6ff"/>
+    <text x="391" y="137" fill="#1d4ed8" font-size="13" font-weight="700">⚙️ Add-In 业务逻辑层 (.NET 10)</text>
+
+    <!-- 进程管理守护 -->
+    <rect x="391" y="160" width="318" height="46" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="405" y="179" fill="#0f172a" font-size="12" font-weight="600">MapsforgeServerManager 守护哨兵</text>
+    <text x="405" y="196" fill="#64748b" font-size="11">本地服务探活 (HTTP GET /health) 与自动拉起</text>
+
+    <!-- CIM 动态图层装配 -->
+    <rect x="391" y="215" width="318" height="52" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="405" y="234" fill="#0f172a" font-size="12" font-weight="600">CIM 动态图层注入器 (Pro SDK 3.7)</text>
+    <text x="405" y="251" fill="#64748b" font-size="11">自动构建管理图层组，注入 CIMRasterLayer</text>
+    <text x="405" y="263" fill="#64748b" font-size="11">装配 WGS-84/WebMercator 双向切片定义</text>
+
+    <!-- 边境合规拦截 -->
+    <rect x="391" y="275" width="318" height="42" rx="6" fill="#fff7ed" stroke="#fed7aa"/>
+    <text x="405" y="293" fill="#c2410c" font-size="12" font-weight="600">国界触发强制合规拦截 (Border Guard)</text>
+    <text x="405" y="308" fill="#9a3412" font-size="11">进入涉密/国界区域时自动熔断境外未审底图</text>
+  </g>
+
+  <!-- 1.3 TOC 地图图层管理展示 -->
+  <g filter="url(#card-shadow)">
+    <rect x="750" y="115" width="330" height="215" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <rect x="750" y="115" width="330" height="34" rx="10 10 0 0" fill="#f0fdf4"/>
+    <text x="766" y="137" fill="#15803d" font-size="13" font-weight="700">🗺️ TOC 地图视图与图层组栈</text>
+
+    <rect x="766" y="158" width="298" height="158" rx="6" fill="#fafafa" stroke="#e2e8f0"/>
+    <text x="780" y="178" fill="#0f172a" font-size="11.5" font-weight="700">📂 [✔] GeoAI 复合底图与离线矢量栈</text>
+    
+    <!-- 拆层示意 -->
+    <rect x="790" y="190" width="260" height="34" rx="4" fill="#dcfce7" stroke="#86efac"/>
+    <text x="802" y="206" fill="#166534" font-size="11" font-weight="600">🔝 顶层：LocusSat 户外路网与高程注记</text>
+    <text x="802" y="219" fill="#15803d" font-size="10">透明背景 / 山峰标高 / POI / 避开植被阴影</text>
+
+    <rect x="790" y="230" width="260" height="34" rx="4" fill="#e0f2fe" stroke="#7dd3fc"/>
+    <text x="802" y="246" fill="#075985" font-size="11" font-weight="600">↔️ 中层：跨纬度 50m SRTM 等高线</text>
+    <text x="802" y="259" fill="#0369a1" font-size="10">透明切片 / 25°N 无缝缝合 / 绝不糊住地表</text>
+
+    <rect x="790" y="270" width="260" height="34" rx="4" fill="#ffedd5" stroke="#fdba74"/>
+    <text x="802" y="286" fill="#9a3412" font-size="11" font-weight="600">⏬ 底层：GCJ-02 动态逆采样纠偏卫星</text>
+    <text x="802" y="299" fill="#c2410c" font-size="10">毫秒级坐标逆变换 / WGS-84 无缝对齐 / 误差&lt;0.5m</text>
+  </g>
+
+  <!-- ======================= 跨进程连接线与通信通道 ======================= -->
+  <!-- 进程探活与拉起 -->
+  <path d="M 550,330 V 380 Q 550,390 540,390 H 260 Q 250,390 250,400 V 410" 
+        fill="none" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-gray)"/>
+  <rect x="330" y="380" width="160" height="20" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="410" y="394" fill="#475569" font-size="10" font-weight="600" text-anchor="middle">子进程管理与健康心跳</text>
+
+  <!-- REST MapServer 切片请求 -->
+  <path d="M 680,410 V 375 Q 680,365 690,365 H 770 Q 780,365 780,350 V 330" 
+        fill="none" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arrow-blue)"/>
+  <rect x="660" y="360" width="210" height="22" rx="4" fill="#2563eb"/>
+  <text x="765" y="375" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">标准 ArcGIS REST MapServer 握手</text>
+
+  <!-- ======================= 区域 2：后台无头切片微服务 ======================= -->
+  <rect x="20" y="420" width="700" height="295" rx="12" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1.5"/>
+  <rect x="36" y="408" width="280" height="24" rx="6" fill="#0d9488"/>
+  <text x="176" y="424" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">MapsforgeTileServer (Java 17 / Port 18765)</text>
+
+  <!-- 2.1 双 WebGIS 协议网关 -->
+  <g filter="url(#card-shadow)">
+    <rect x="40" y="450" width="310" height="115" rx="8" fill="#ffffff" stroke="#ccfbf1" stroke-width="1.2"/>
+    <text x="56" y="474" fill="#0f766e" font-size="13" font-weight="700">🌐 双协议标准 WebGIS 网关</text>
+    
+    <rect x="56" y="488" width="278" height="30" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="68" y="507" fill="#0f172a" font-size="11" font-weight="600">ArcGIS REST MapServer 仿真网关</text>
+    <text x="260" y="507" fill="#0d9488" font-size="10" font-weight="700">/arcgis/rest/...</text>
+
+    <rect x="56" y="524" width="278" height="30" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="68" y="543" fill="#0f172a" font-size="11" font-weight="600">OGC WMTS 1.0.0 标准切片服务</text>
+    <text x="260" y="543" fill="#0d9488" font-size="10" font-weight="700">/wmts/1.0.0/...</text>
+  </g>
+
+  <!-- 2.2 核心光栅化与空间处理引擎 -->
+  <g filter="url(#card-shadow)">
+    <rect x="375" y="450" width="325" height="250" rx="8" fill="#ffffff" stroke="#ccfbf1" stroke-width="1.2"/>
+    <text x="391" y="474" fill="#0f766e" font-size="13" font-weight="700">⚡ Mapsforge 0.25.0 核心引擎与算法栈</text>
+
+    <!-- 动态逆采样纠偏模块 -->
+    <rect x="391" y="488" width="293" height="46" rx="5" fill="#fff7ed" stroke="#fed7aa"/>
+    <text x="405" y="506" fill="#c2410c" font-size="11.5" font-weight="700">AMapProxy: GCJ-02 动态逆采样纠偏</text>
+    <text x="405" y="523" fill="#9a3412" font-size="10.5">高精度双线性插值坐标逆变换，毫秒级流式输出</text>
+
+    <!-- 跨纬度空间缝合 -->
+    <rect x="391" y="540" width="293" height="46" rx="5" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text x="405" y="558" fill="#0369a1" font-size="11.5" font-weight="700">MultiMapDataStore 跨纬度无缝缝合</text>
+    <text x="405" y="575" fill="#0284c7" font-size="10.5">N24E102 + N25E102 在 25°N 空间联合，铲除接缝断裂</text>
+
+    <!-- dp 单位动态剥离 -->
+    <rect x="391" y="592" width="293" height="46" rx="5" fill="#fdf4ff" stroke="#f5d0fe"/>
+    <text x="405" y="610" fill="#a21caf" font-size="11.5" font-weight="700">XML Theme Sanitizer (dp 单位动态剥离)</text>
+    <text x="405" y="627" fill="#c026d3" font-size="10.5">内存正则流式替换 Android dp 单位，防 AWT 崩溃</text>
+
+    <!-- 缓存机制 -->
+    <rect x="391" y="644" width="293" height="44" rx="5" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="405" y="662" fill="#0f172a" font-size="11.5" font-weight="700">高并发 SHA-256 磁盘与内存缓存</text>
+    <text x="405" y="677" fill="#64748b" font-size="10.5">按 Profile / ExcludeCats 物理隔离，命中率 &gt; 98%</text>
+  </g>
+
+  <!-- 离线/在线安全模式 -->
+  <g filter="url(#card-shadow)">
+    <rect x="40" y="575" width="310" height="125" rx="8" fill="#ffffff" stroke="#ccfbf1" stroke-width="1.2"/>
+    <text x="56" y="598" fill="#0f766e" font-size="13" font-weight="700">🛡️ 安全、合规与网络守卫</text>
+    
+    <rect x="56" y="610" width="278" height="38" rx="4" fill="#fef2f2" stroke="#fecaca"/>
+    <text x="68" y="627" fill="#b91c1c" font-size="11" font-weight="600">纯离线断网竞赛模式</text>
+    <text x="68" y="640" fill="#dc2626" font-size="10">阻断所有外网 HTTP 连接，100% 本地 .map 渲染</text>
+
+    <rect x="56" y="654" width="278" height="38" rx="4" fill="#f0fdf4" stroke="#bbf7d0"/>
+    <text x="68" y="671" fill="#15803d" font-size="11" font-weight="600">透明通道 Alpha 质量门禁 (G2 门禁)</text>
+    <text x="68" y="684" fill="#16a34a" font-size="10">PNG32 输出，透明像素率 91.8%，无色差底图穿透</text>
+  </g>
+
+  <!-- ======================= 区域 3：底层数据与资产源 ======================= -->
+  <rect x="740" y="420" width="360" height="295" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="756" y="408" width="180" height="24" rx="6" fill="#475569"/>
+  <text x="846" y="424" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">多源数据存储与输入层</text>
+
+  <!-- 3.1 本地离线矢量资产 -->
+  <g filter="url(#card-shadow)">
+    <rect x="756" y="450" width="328" height="135" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <text x="772" y="474" fill="#334155" font-size="13" font-weight="700">💾 本地离线矢量与渲染主题</text>
+
+    <rect x="772" y="488" width="296" height="28" rx="4" fill="#f1f5f9"/>
+    <text x="784" y="506" fill="#0f172a" font-size="11">🗺️ 50m SRTM 等高线: N24E102.map / N25E102.map</text>
+
+    <rect x="772" y="520" width="296" height="28" rx="4" fill="#f1f5f9"/>
+    <text x="784" y="538" fill="#0f172a" font-size="11">📍 基础路网与注记: Ch-Yunnan_oam.osm.map</text>
+
+    <rect x="772" y="552" width="296" height="26" rx="4" fill="#f1f5f9"/>
+    <text x="784" y="569" fill="#0f172a" font-size="11">🎨 渲染主题样式: Elevate / LocusSat XML 主题库</text>
+  </g>
+
+  <!-- 3.2 远程在线切片源 -->
+  <g filter="url(#card-shadow)">
+    <rect x="756" y="600" width="328" height="100" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <text x="772" y="624" fill="#334155" font-size="13" font-weight="700">☁️ 远程在线切片服务 (按需代理)</text>
+
+    <rect x="772" y="638" width="296" height="26" rx="4" fill="#fff7ed"/>
+    <text x="784" y="655" fill="#ea580c" font-size="11">🛰️ 高德卫星影像 CDN (GCJ-02 火星坐标)</text>
+
+    <rect x="772" y="668" width="296" height="26" rx="4" fill="#f0f9ff"/>
+    <text x="784" y="685" fill="#0284c7" font-size="11">🏔️ OpenTopoMap 官方高精地形等高线切片</text>
+  </g>
+
+  <!-- 数据到服务端的连接线 -->
+  <path d="M 756,515 H 700" fill="none" stroke="#0d9488" stroke-width="2" marker-end="url(#arrow-teal)"/>
+  <path d="M 756,650 H 700" fill="none" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+
+</svg>
+</div>
+
+</body>
+</html>
