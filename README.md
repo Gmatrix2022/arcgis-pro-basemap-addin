@@ -5,6 +5,8 @@
 [![.NET](https://img.shields.io/badge/.NET-10.0--windows-512bd4.svg)](https://dotnet.microsoft.com/)
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
 [![Mapsforge](https://img.shields.io/badge/Mapsforge-0.25.0-green.svg)](https://github.com/mapsforge/mapsforge)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black.svg)](https://github.com/Gmatrix2022/arcgis-pro-basemap-addin)
+[![Gitee Repo](https://img.shields.io/badge/Gitee-码云镜像-red.svg)](https://gitee.com/nousyang/arcgis-pro-basemap-addin)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 > **ArcGIS Pro 3.7 现代化全功能底图扩展插件**：基于 Pro SDK 3.7 (.NET 10) 与高性能 Mapsforge 0.25.0 (Java 17) 无头渲染微服务，实现 **GCJ-02 在线卫图实时双线性纠偏至 WGS-84**、**本地 `.map` 离线矢量瓦片三层拆层渲染**（纯等高线透明层 + 户外路网注记层 + 卫星底图）以及**国界触发强制合规拦截**。

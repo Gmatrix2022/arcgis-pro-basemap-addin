@@ -114,8 +114,9 @@ ArcGIS Pro 对原生 REST MapServer 的支持是最好的。我们的本地后�
 
 本项目遵循 **Apache-2.0** 宽松开源协议，代码、编译工程与本地服务端全部公开发布在 GitHub 上：
 
-* **GitHub 仓库地址**：
-  👉 `https://github.com/Gmatrix2022/arcgis-pro-basemap-addin`
+* **开源仓库地址**：
+  * **GitHub**：👉 [`https://github.com/Gmatrix2022/arcgis-pro-basemap-addin`](https://github.com/Gmatrix2022/arcgis-pro-basemap-addin)
+  * **Gitee（码云国内镜像）**：👉 [`https://gitee.com/nousyang/arcgis-pro-basemap-addin`](https://gitee.com/nousyang/arcgis-pro-basemap-addin)
 
 ### 一键安装体验步骤：
 
